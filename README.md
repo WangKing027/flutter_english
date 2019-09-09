@@ -8,6 +8,8 @@
 1. 调用AudioPlayer播放assets和本地文件夹/网络资源音频,封装成AudioPlayerFactory调用
 2. 封装EventChannel/MethodChannel，通过with 实现重写方法实现具体页面逻辑具体处理
 
+###
+下载地址：https://www.pgyer.com/65M0
 
 A few resources to get you started if this is your first Flutter project:
 
