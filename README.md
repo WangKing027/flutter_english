@@ -1,6 +1,7 @@
-# flutter_mvvm
+# flutter_english
 
-A new Flutter project.
+一个模仿流利说线上学习英语的app
+
 
 ## Getting Started
 
