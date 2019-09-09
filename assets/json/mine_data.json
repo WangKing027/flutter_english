@@ -1,0 +1,25 @@
+{
+  "userName": "",
+  "id": "未登录",
+  "isVip": false,
+  "newWordsCount": 28,
+  "noteCount": 3,
+  "mineListItems": [
+    {
+      "icon": "assets/images/icon_item_open_vip.png",
+      "text": "开通会员VIP"
+    },
+    {
+      "icon": "assets/images/icon_remind.png",
+      "text": "我的学习提醒"
+    },
+    {
+      "icon": "assets/images/icon_feedback.png",
+      "text": "意见反馈"
+    },
+    {
+      "icon": "assets/images/icon_about_us.png",
+      "text": "关于我们"
+    }
+  ]
+}

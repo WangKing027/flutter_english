@@ -1,0 +1,72 @@
+[
+  {
+    "unitName": "Unit 1",
+    "level": 1,
+    "unitTitle": "中考词汇第1单元",
+    "score": 1.0,
+    "state": 2,
+    "type": 0,
+    "partName": "买菜话语",
+    "partDec": "外出买菜不知道如何称呼菜名，快速教你如何与售卖员谈论斤数和价格，轻松交流顺利买菜喔！"
+  },
+  {
+    "unitName": "Unit 2",
+    "level": 1,
+    "unitTitle": "中考词汇第2单元",
+    "score": 1.4,
+    "state": 2,
+    "type": 0,
+    "partName": "初次见面",
+    "partDec": "初次见面不知道如何打招呼，快速教你轻松愉快地和别人打招呼！"
+  },
+  {
+    "unitName": "Unit 3",
+    "level": 1,
+    "unitTitle": "中考词汇第3单元",
+    "score": 4.8,
+    "state": 1,
+    "type": 0,
+    "partName": "中考词汇第3单元",
+    "partDec": ""
+  },
+  {
+    "unitName": "Unit 4",
+    "level": 1,
+    "unitTitle": "中考词汇第4单元",
+    "score": 0.0,
+    "state": 1,
+    "type": 0,
+    "partName": "中考词汇第4单元",
+    "partDec": ""
+  },
+  {
+    "unitName": "Unit 5",
+    "level": 1,
+    "unitTitle": "中考词汇第5单元",
+    "score": 0.0,
+    "state": 0,
+    "type": 0,
+    "partName": "中考词汇第5单元",
+    "partDec": ""
+  },
+  {
+    "unitName": "Unit 6",
+    "level": 1,
+    "unitTitle": "中考词汇第7单元",
+    "score": 0.0,
+    "state": 0,
+    "type": 0,
+    "partName": "中考词汇第7单元",
+    "partDec": ""
+  },
+  {
+    "unitName": "Unit 8",
+    "level": 1,
+    "unitTitle": "中考词汇第8单元",
+    "score": 0.0,
+    "state": 0,
+    "type": 0,
+    "partName": "中考词汇第8单元",
+    "partDec": ""
+  }
+]
