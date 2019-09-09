@@ -2,10 +2,12 @@
 
 一个模仿流利说线上学习英语的app
 
-
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+项目亮点：
+1. 调用AudioPlayer播放assets和本地文件夹/网络资源音频,封装成AudioPlayerFactory调用
+2. 封装EventChannel/MethodChannel，通过with 实现重写方法实现具体页面逻辑具体处理
+
 
 A few resources to get you started if this is your first Flutter project:
 
