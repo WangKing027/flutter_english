@@ -8,6 +8,7 @@ class RecordButtonWidget extends StatefulWidget{
   final double widgetHeight ;
   final EdgeInsetsGeometry padding ;
   final Color backgroundColor ;
+  final String text ;
 
   RecordButtonWidget({
     Key key,
@@ -15,6 +16,7 @@ class RecordButtonWidget extends StatefulWidget{
     this.onPressed ,
     this.widgetHeight,
     this.padding,
+    this.text = "朗读文本",
     this.backgroundColor,
   }) : super(key:key);
 
@@ -58,7 +60,7 @@ class _RecordButtonWidgetState extends State<RecordButtonWidget> {
               ),
               Padding(
                 padding: EdgeInsets.only(left: Dimens.dimen_8dp),
-                child: Text("朗读文本",
+                child: Text(widget.text,
                   style: TextStyle(
                     color: Colours.white_color,
                     fontSize: Dimens.font_16sp,

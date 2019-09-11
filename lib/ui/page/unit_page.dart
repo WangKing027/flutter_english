@@ -10,6 +10,7 @@ import 'package:flutter_mvvm/provider/provider_widget.dart';
 import 'package:flutter_mvvm/viewmodel/unit_viewmodel.dart';
 import 'package:flutter_mvvm/ui/page/part_page.dart';
 import 'package:flutter_mvvm/model/unit_model.dart';
+import 'package:flutter_mvvm/base/route_factory.dart';
 
 
 class UnitPage extends StatefulWidget{
@@ -170,7 +171,7 @@ class _UnitPageState extends BaseState<UnitPage> with TickerProviderStateMixin{
                              if(model.state == 0){
                                showToast("尚未解锁,请接着完成课程~");
                              } else {
-                               Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => PartPage(model: model,)));
+                               MyRouteFactory.pushSlideY(context: context,page:PartPage(model: model,));
                              }
                            },
                          ),

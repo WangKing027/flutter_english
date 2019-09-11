@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_mvvm/base/base_state.dart';
 import 'dart:async';
 import 'package:flutter_mvvm/ui/app_page.dart';
+import 'package:flutter_mvvm/base/route_factory.dart';
 
 class SplashPage extends StatefulWidget {
 
@@ -53,7 +54,7 @@ class _SplashPageState extends BaseState<SplashPage> with SingleTickerProviderSt
         setState(() {});
         if(_downCont <= 0){
            timer.cancel();
-           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => AppPage(),));
+           MyRouteFactory.pushReplaceSlideY(context: context,page: AppPage());
         }
     });
   }
@@ -118,7 +119,7 @@ class _SplashPageState extends BaseState<SplashPage> with SingleTickerProviderSt
             ),
             onPressed: (){
               _timer?.cancel();
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => AppPage(),));
+              MyRouteFactory.pushReplaceSlideY(context: context,page: AppPage());
             },
           ),
           top: MediaQueryData.fromWindow(ui.window).padding.top,right: 10.0,

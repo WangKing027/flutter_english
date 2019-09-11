@@ -66,30 +66,31 @@ class _IntensiveAssessPartState extends State<IntensiveAssessPart>{
                 alignment: Alignment.center,
                 children: <Widget>[
                   Positioned(child:
-                    widget.scoreVisibly ?
+//                    widget.scoreVisibly ?
+//                    Padding(
+//                      padding: _paddingEdgeInsets,
+//                      child: RichText(
+//                        textDirection: TextDirection.ltr,
+//                        textAlign:TextAlign.center,
+//                        text: TextSpan(
+//                          children: <TextSpan>[
+//                             if(widget.resultData.isNotEmpty && widget.resultData.length > 0)
+//                               for(WordStyleModel wordStyle in widget.resultData)
+//                                 TextSpan(text: "${wordStyle.word}",
+//                                   style: TextStyle(
+//                                       color: wordStyle.color,
+//                                       fontWeight: FontWeight.w500,
+//                                       fontSize: Dimens.font_16sp,
+//                                       height: 1.2,
+//                                       decoration: wordStyle.decoration,
+//                                       decorationStyle: wordStyle.decorationStyle,
+//                                   ),
+//                                 ),
+//                          ],
+//                        ),
+//                      ),
+//                    ) :
                     Padding(
-                      padding: _paddingEdgeInsets,
-                      child: RichText(
-                        textDirection: TextDirection.ltr,
-                        textAlign:TextAlign.center,
-                        text: TextSpan(
-                          children: <TextSpan>[
-                             if(widget.resultData.isNotEmpty && widget.resultData.length > 0)
-                               for(WordStyleModel wordStyle in widget.resultData)
-                                 TextSpan(text: "${wordStyle.word}",
-                                   style: TextStyle(
-                                       color: wordStyle.color,
-                                       fontWeight: FontWeight.w500,
-                                       fontSize: Dimens.font_16sp,
-                                       height: 1.2,
-                                       decoration: wordStyle.decoration,
-                                       decorationStyle: wordStyle.decorationStyle,
-                                   ),
-                                 ),
-                          ],
-                        ),
-                      ),
-                    ) : Padding(
                       padding: _paddingEdgeInsets,
                       child: Text(widget.model.originalSentenceEn,
                         textAlign: TextAlign.center,

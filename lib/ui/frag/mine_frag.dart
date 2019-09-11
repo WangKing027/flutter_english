@@ -9,6 +9,7 @@ import 'package:flutter_mvvm/provider/provider_widget.dart';
 import 'package:flutter_mvvm/provider/view_state.dart';
 import 'package:flutter_mvvm/provider/view_state_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_mvvm/base/route_factory.dart';
 
 class MineFrag extends StatefulWidget {
 
@@ -129,7 +130,7 @@ class _MineFragState extends State<MineFrag> with AutomaticKeepAliveClientMixin{
                   ],
                 ),
                 onPressed: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => LoginPage()));
+                  MyRouteFactory.pushSlideY(context: context,page: LoginPage());
                 }
             ),
             Padding(

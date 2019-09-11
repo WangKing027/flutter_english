@@ -1,3 +1,5 @@
+import 'package:flutter_mvvm/base/route_factory.dart';
+import 'package:flutter_mvvm/ui/page/ai/intensive_learning.dart';
 import 'package:flutter_mvvm/components/ai/shared/pause_dialog.dart';
 import 'package:flutter_mvvm/provider/view_state_obj_model.dart';
 import 'package:flutter_mvvm/base/audio_player_factory.dart';
@@ -100,7 +102,7 @@ class DialogueViewModel extends ViewStateObjModel<CommonModel> with BaseChannel{
     ).then((item){
       if(item == PausePageAction.again){// 再来一次
         showToast("重来");
-        Navigator.of(_context).pushReplacement(FadeRoutePage(child:DialoguePreview()));
+        MyRouteFactory.pushReplaceFade(context: _context, page: DialoguePreview());
       } else if(item == PausePageAction.continueLearning){// 继续
         showToast("继续");
         if(_playing){
@@ -177,11 +179,15 @@ class DialogueViewModel extends ViewStateObjModel<CommonModel> with BaseChannel{
         break;
       case Strings.string_tag_next:
         _curProgress += 1 ;
-        if(_curProgress > _maxProgress - 1){
-           _curProgress = _maxProgress - 1;
+        if(_curProgress > _maxProgress){
+           _curProgress = _maxProgress;
         }
-        _addModelToList();
-
+        if(_curProgress == _maxProgress){
+          MyRouteFactory.pushReplaceFade(context: _context,page: IntensiveLearning());
+        } else {
+          _addModelToList();
+        }
+       
         break;
     }
   }

@@ -8,7 +8,7 @@ import 'package:flutter_mvvm/provider/provider_widget.dart';
 import 'package:flutter_mvvm/ui/page/unit_page.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_mvvm/base/route_page_builder.dart';
+import 'package:flutter_mvvm/base/route_factory.dart';
 
 class CourseFrag extends StatefulWidget {
 
@@ -123,13 +123,7 @@ class _CourseFragState extends State<CourseFrag> with AutomaticKeepAliveClientMi
             child: CourseCardWidget(
               model: model.dataList[index - 1],
               heroTag: "hero_tag_test_course_$index",
-              onPressed: (model) =>
-//                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => UnitPage(model: model,heroTag: "hero_tag_test_course_$index",),),),
-//                 Navigator.of(context).push(FadeRoutePage(child: UnitPage(model: model,heroTag: "hero_tag_test_course_$index",),)),
-//                  Navigator.of(context).push(RotationRoutePage(child: UnitPage(model: model,heroTag: "hero_tag_test_course_$index",)))
-//                Navigator.of(context).push(SlideXRoutePage(child: UnitPage(model: model,heroTag: "hero_tag_test_course_$index",),bottomIn: false)),
-//                Navigator.of(context).push(SlideYRoutePage(child: UnitPage(model: model,heroTag: "hero_tag_test_course_$index",),leftIn: false)),
-                Navigator.of(context).push(CombinationRoutePage(child: UnitPage(model: model,heroTag: "hero_tag_test_course_$index",),))
+              onPressed: (model) => MyRouteFactory.pushCombination(context: context,page: UnitPage(model: model,heroTag: "hero_tag_test_course_$index",))
             ),
           );
         },

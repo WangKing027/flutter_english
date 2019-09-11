@@ -11,6 +11,7 @@ import 'package:flutter_mvvm/base/base_channel.dart';
 import 'package:flutter_mvvm/res/strings.dart';
 import 'package:flutter_mvvm/model/ai/module_model.dart';
 import 'package:flutter_mvvm/model/ai/word_model.dart';
+import 'package:flutter_mvvm/utils/view_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -25,9 +26,7 @@ class IntensiveViewModel extends ViewStateObjModel<CommonModel> with BaseChannel
   bool _bottomNavLeftVisibly = true ,
       _bottomNavRightVisibly = true ,
       _bottomNavGifVisibly = false ,
-      _rippleClickable = true ,
-      _isSupportUpWardAnimation = true,
-      _executeUpWardAnimation = false ; // 是否开启动画，true之前必须设置为false,否则不生效
+      _rippleClickable = true ;
   int _maxProgress = 0 , _curProgress = 0 ;
   String _rippleNotice = Strings.string_click_wave_stop_record;
   BuildContext _context ;
@@ -37,6 +36,7 @@ class IntensiveViewModel extends ViewStateObjModel<CommonModel> with BaseChannel
   bool _voiceVisibly = true,
        _playVisibly = false ,
        _scoreVisibly = false;
+  double _score = 0.0 ;
 
 
   // 自定义初始化方法
@@ -154,10 +154,6 @@ class IntensiveViewModel extends ViewStateObjModel<CommonModel> with BaseChannel
   //点击底部导航
   void onBottomNavPressed(type){
     debugPrint("[onBottomNavPressed] --- type: $type");
-    _isSupportUpWardAnimation = true ;
-    if(_executeUpWardAnimation){
-      _executeUpWardAnimation = false ;
-    }
     switch(type){
       case Strings.string_tag_previous:
         _curProgress -= 1 ;
@@ -190,6 +186,9 @@ class IntensiveViewModel extends ViewStateObjModel<CommonModel> with BaseChannel
     }
   }
 
+  // 考核部分得分
+  double assessScore() => _score ;
+
   // 考核播放按钮可见
   bool assessPlayVisibly() => _playVisibly ;
 
@@ -218,25 +217,86 @@ class IntensiveViewModel extends ViewStateObjModel<CommonModel> with BaseChannel
   void onRipplePressed(){
     _rippleNotice = Strings.string_click_wave_audio_parse ;
     _rippleClickable = false ;
-    _isSupportUpWardAnimation = false ;
     audioPlayerFactory.playAssetAudio(assetAudio: "record_up.wav",prefix: "audio/");
     notifyListeners();
-    // 模拟打分操作
+    var score = ViewUtils.getScore();
+    simulateShowScore(score);
+  }
+
+  // 模拟打分操作
+  void simulateShowScore(int score){
     Future.delayed(Duration(milliseconds: 4000),(){
       _rippleClickable = true ;
       _bottomState = _rippleStateFrom ;
       notifyListeners();
-      if(_pageType == PageModuleType.PageAssess){
+
+      var _audio = ViewUtils.getScoreResultAudio(score) ;
+      if(_pageType == PageModuleType.PageAssess){ // 考核
         int _time = _pageViewData[_curProgress].time;
         _time -= 1 ;
         _pageViewData[_curProgress].time = _time ;
-        if(_time <= 0){
-          onBottomNavPressed(Strings.string_tag_next);
-          return;
-        }
+
+        _score = score.toDouble();
+        _scoreVisibly = true ;
+        _bottomState = BottomState.EmptyView ;
+        notifyListeners();
+        audioPlayerFactory.playAssetAudio(assetAudio:_audio,prefix: "audio/",listenPlayCompletion:(){ // 音效
+           _playVisibly = false ;
+           notifyListeners();
+           _playResultAudio("${_pageViewData[_curProgress].audio}", (){ // 模仿录音
+               _playVisibly = true ;
+               notifyListeners();
+               if(score > 60){ // 及格
+                 _bottomState = BottomState.ButtonContinue ;
+                 _scoreVisibly = false ;
+                 notifyListeners();
+               } else { // 不及格
+                 if(_time <= 0){ // 第二次机会答对
+                   _bottomState = BottomState.ButtonContinue ;
+                   _scoreVisibly = false ;
+                   notifyListeners();
+                 } else { // 第一次机会答错
+                   audioPlayerFactory.playAssetAudio(assetAudio: "try_again.wav",prefix: "audio/",listenPlayCompletion: (){
+                     _playVisibly = false ;
+                     _scoreVisibly = false ;
+                     _bottomState = BottomState.RecordButton;
+                     notifyListeners();
+                     _playResultAudio("${_pageViewData[_curProgress].audio}",(){// 播放原音
+                        _playVisibly = true ;
+                        notifyListeners();
+                     });
+                   });
+                 }
+               }
+           });
+        });
+      } else { // 非考核
+        ViewUtils.showEvaluateToast(score, context: _context);
+        audioPlayerFactory.playAssetAudio(assetAudio:_audio,prefix: "audio/",listenPlayCompletion:(){ // 音效
+          _bottomNavGifVisibly = true ;
+          _bottomNavLeftVisibly = false;
+          _bottomNavRightVisibly = false;
+          notifyListeners();
+          _playResultAudio("${_pageViewData[_curProgress].audio}", (){ // 模仿录音
+              _playResultAudio("${_pageViewData[_curProgress].audio}", (){ // 播放原音
+                _bottomNavGifVisibly = false ;
+                _bottomNavRightVisibly = true ;
+                _bottomNavLeftVisibly = true ;
+                notifyListeners();
+              });
+          });
+        });
       }
-      showToast("Bad!");
     });
+  }
+
+  // 播放打分结果音频
+  void _playResultAudio(String _audio,Function callback){
+    audioPlayerFactory.playAssetAudio(
+        assetAudio: _audio,
+        prefix: "zip/",
+        listenPlayCompletion: callback
+    );
   }
 
   // PageView 滑动到Page
@@ -248,8 +308,6 @@ class IntensiveViewModel extends ViewStateObjModel<CommonModel> with BaseChannel
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeIn,
     ).then((p){
-      _executeUpWardAnimation = true ;
-      notifyListeners();
       _playSentenceAudio();
     });
   }
@@ -278,21 +336,18 @@ class IntensiveViewModel extends ViewStateObjModel<CommonModel> with BaseChannel
     }
   }
 
-  // 是否支持上移动画
-  bool isSupportFadeAnimation() => _isSupportUpWardAnimation;
-
-  // 是否执行上移动动画
-  bool executeUpWardAnimation() => _executeUpWardAnimation ;
-
   // 点击考核部分的录音
   void onPressedRecordBtn(){
     _rippleStateFrom = BottomState.RecordButton ;
     _bottomState = BottomState.RecordRipple ;
     _rippleNotice = Strings.string_click_wave_stop_record ;
+    _playVisibly = true ;
     notifyListeners();
     audioPlayerFactory.playAssetAudio(assetAudio: "record_down.wav",prefix: "audio/");
   }
 
+  // 点击考核继续
+  void onPressedContinueBtn() => onBottomNavPressed(Strings.string_tag_next);
 
 }
 
@@ -301,4 +356,5 @@ enum BottomState{
   RecordRipple,//录音水波纹
   EmptyView, // 空白
   RecordButton,// 录音按钮
+  ButtonContinue,// 继续按钮
 }

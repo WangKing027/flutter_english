@@ -10,6 +10,7 @@ import 'package:flutter_mvvm/provider/provider_widget.dart';
 import 'package:flutter_mvvm/viewmodel/learn_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mvvm/ui/page/unit_page.dart';
+import 'package:flutter_mvvm/base/route_factory.dart';
 
 class LearnFrag extends StatefulWidget {
 
@@ -81,7 +82,7 @@ class _LearnFragState extends State<LearnFrag> with AutomaticKeepAliveClientMixi
                   ),textAlign: TextAlign.center,),
                   CupertinoButton(
                     child: Image.asset("assets/images/img_nosignin_protrail.png",width: 35.0,height: 35.0,),
-                    onPressed: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => LoginPage())),
+                    onPressed: ()=> MyRouteFactory.pushSlideY(context: context,page: LoginPage()),
                   ),
                 ],
               ),
@@ -203,7 +204,7 @@ class _LearnFragState extends State<LearnFrag> with AutomaticKeepAliveClientMixi
             ),
             Offstage(
               child: GoLoginWidget(tipImageUrl: "assets/images/img_no_couse.png",callback: (){
-                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => LoginPage()));
+                MyRouteFactory.pushSlideY(context: context,page: LoginPage());
               },),
               offstage: model.model.courseModels != null ? model.model.courseModels.length > 0 : false ,
             ),
@@ -219,7 +220,7 @@ class _LearnFragState extends State<LearnFrag> with AutomaticKeepAliveClientMixi
                   itemBuilder: (ctx,index){
                     return CourseCardWidget(
                       model: model.model.courseModels[index],
-                      onPressed: (model) => Navigator.push(context, MaterialPageRoute(builder: (ctx) => UnitPage(model: model,))),
+                      onPressed: (model) => MyRouteFactory.pushSlideY(context:context, page:UnitPage(model: model,),),
                     );
                   },
                 ),

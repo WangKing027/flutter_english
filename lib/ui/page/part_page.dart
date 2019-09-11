@@ -8,6 +8,8 @@ import 'package:flutter_mvvm/components/widget_part_item.dart';
 import 'package:flutter_mvvm/model/unit_model.dart';
 import 'package:flutter_mvvm/ui/page/ai/dialogue_preview.dart';
 import 'package:flutter_mvvm/ui/page/ai/intensive_learning.dart';
+import 'package:flutter_mvvm/ui/page/ai/Semantic_matching.dart';
+import 'package:flutter_mvvm/base/route_factory.dart';
 
 class PartPage extends StatefulWidget {
 
@@ -73,7 +75,7 @@ class _PartPageState extends BaseState<PartPage> with SingleTickerProviderStateM
       {
         "partName":"词义配对",
         "partEnName":"Multiple",
-        "routePage":DialoguePreview(),
+        "routePage":SemanticMatching(),
       },
       {
         "partName":"无字幕跟读",
@@ -235,7 +237,7 @@ class _PartPageState extends BaseState<PartPage> with SingleTickerProviderStateM
                      partEnName: _getListModel()[index -1]["partEnName"],
                      state: index,
                      onPressed: (){
-                        Navigator.push(context, FadeRoutePage(child: _getListModel()[index -1]["routePage"]));
+                        MyRouteFactory.pushSlideY(context: context,page: _getListModel()[index -1]["routePage"]);
                      },
                    ),
                  );

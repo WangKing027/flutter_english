@@ -8,6 +8,7 @@ import 'package:flutter_mvvm/components/ai/widget_app_bar.dart';
 import 'package:flutter_mvvm/components/ai/widget_bottom_nav.dart';
 import 'package:flutter_mvvm/components/ai/widget_record_ripple.dart';
 import 'package:flutter_mvvm/components/ai/widget_record_button.dart';
+import 'package:flutter_mvvm/components/ai/widget_bottom_btn.dart';
 import 'package:flutter_mvvm/components/ai/shared/animated_upward.dart';
 import 'package:flutter_mvvm/components/ai/part/intensive_sentence_part.dart';
 import 'package:flutter_mvvm/components/ai/part/intensive_word_part.dart';
@@ -64,6 +65,7 @@ class _IntensiveLearningState extends BaseState<IntensiveLearning> with SingleTi
                         playVisibly: model.assessPlayVisibly(),
                         voiceVisibly: model.assessVoiceVisibly(),
                         scoreVisibly: model.assessScoreVisibly(),
+                        score: model.assessScore(),
                       );
                     }
                     return Text("");
@@ -94,10 +96,13 @@ class _IntensiveLearningState extends BaseState<IntensiveLearning> with SingleTi
                   child: RecordButtonWidget(
                     widgetHeight: Dimens.dimen_100dp,
                     padding: EdgeInsets.only(bottom: Dimens.dimen_27dp,top: Dimens.dimen_18dp),
-                    onPressed: () => model.onPressedRecordBtn(),
+                    onPressed:() => model.onPressedRecordBtn(),
                   ),
-                  supportUpWardAnimation: model.isSupportFadeAnimation(),
-                  execute: model.executeUpWardAnimation(),
+                )
+              else if(model.getBottomState() == BottomState.ButtonContinue)
+                BottomBtnWidget(
+                  text: "继续",
+                  onPressed:()=> model.onPressedContinueBtn(),
                 )
               else
                 Container(
