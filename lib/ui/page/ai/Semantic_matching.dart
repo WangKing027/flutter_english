@@ -5,6 +5,7 @@ import 'package:flutter_mvvm/viewmodel/ai/semantic_viewmodel.dart';
 import 'package:flutter_mvvm/components/ai/widget_app_bar.dart';
 import 'package:flutter_mvvm/components/ai/shared/widget_notice_text.dart';
 import 'package:flutter_mvvm/components/ai/shared/widget_icon_play.dart';
+import 'package:flutter_mvvm/components/ai/part/semantic_word_match_part.dart';
 
 class SemanticMatching extends StatefulWidget{
 
@@ -33,8 +34,9 @@ class _SemanticMatchingState extends BaseState<SemanticMatching>{
         return Scaffold(
           backgroundColor: Colours.background_color,
           appBar: AppBarWidget(
-            currentProgress: 1,
-            maxProgress: 10,
+            currentProgress: model.getCurProgress(),
+            maxProgress: model.getMaxProgress(),
+            onPausePressed: () => model.onPausePressed(),
           ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -51,10 +53,38 @@ class _SemanticMatchingState extends BaseState<SemanticMatching>{
                 margin: EdgeInsets.only(top: Dimens.dimen_45dp),
                 child: IconPlayWidget(
                   playVisibly: true,
-                  onPressed: (val){
-
-                  },
+                  onPressed: (val) => model.onPlayPressed(val),
                 ),
+              ),
+              Expanded(
+               child: PageView.builder(
+                 itemBuilder: (ctx,index){
+                    return SemanticWordMatchPart(
+                       cacheExtent: 50.0,
+                       builder: (ctx,index){
+                         return Container(
+                           width: MediaQuery.of(context).size.width - 40.0,
+                           height: 50.0,
+                           margin: const EdgeInsets.only(left: 20.0,right: 20.0),
+                           decoration: BoxDecoration(
+                             borderRadius: BorderRadius.circular(8.0),
+                             color: Colors.white,
+                           ),
+                           alignment: Alignment.center,
+                           child: Text("我是第 $index",style: TextStyle(fontSize: 20.0,color: Colors.black),),
+                         );
+                       },
+                      itemCount: 3,
+                      rightIndex: 0,
+                      onPressed: (index){
+
+                      },
+                    );
+                 },
+                 itemCount: model.getMaxProgress(),
+                 controller: model.getController(),
+                 physics: NeverScrollableScrollPhysics(),
+               ),
               ),
             ],
           ),
