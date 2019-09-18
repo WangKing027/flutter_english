@@ -11,6 +11,15 @@
 4. 动画组件封装，hero动画，路由动画封装
 5. 项目结构封装，封装Provider进行状态管理
 
+### Gif效果图如下：
+![image](https://github.com/WangKing027/flutter_english/blob/master/gif/gif1.gif)
+
+![image](https://github.com/WangKing027/flutter_english/blob/master/gif/gif2.gif)
+
+![image](https://github.com/WangKing027/flutter_english/blob/master/gif/gif3.gif)
+
+![image](https://github.com/WangKing027/flutter_english/blob/master/gif/gif4.gif)
+
 ###
 下载地址：https://www.pgyer.com/65M0
 
