@@ -7,7 +7,7 @@ class LogUtils {
 
   static final _screenMaxWidth = Math.max(ScreenUtil.getInstance().screenWidth, ScreenUtil.getInstance().screenHeight).toInt();
 
-  static void m(String msg) => debugPrint(msg ?? "");
+  static void m(String msg) => debugPrint("【$msg】" ?? "");
 
   static void d({String tag,String msg}) => _printLog(tag: tag,msg: msg);
 

@@ -7,6 +7,7 @@ import 'package:flutter_mvvm/utils/log_utils.dart';
 import 'package:flutter_mvvm/base/route_page_builder.dart';
 import 'package:flutter_mvvm/components/ai/shared/pause_dialog.dart';
 import 'package:flutter_mvvm/base/audio_player_factory.dart';
+import 'package:flutter_mvvm/base/audio_recorder_factory.dart';
 import 'package:flutter_mvvm/base/base_channel.dart';
 import 'package:flutter_mvvm/res/strings.dart';
 import 'package:flutter_mvvm/model/ai/module_model.dart';
@@ -172,7 +173,11 @@ class IntensiveViewModel extends ViewStateObjModel<CommonModel> with BaseChannel
         _rippleStateFrom = BottomState.BottomNav ;
         _rippleNotice = Strings.string_click_wave_stop_record ;
         notifyListeners();
-        audioPlayerFactory.playAssetAudio(assetAudio: "record_down.wav",prefix: "audio/");
+        audioPlayerFactory.playAssetAudio(assetAudio: "record_down.wav",prefix: "audio/",
+            listenPlayCompletion: (){
+              _startRecordAudio();
+            },
+        );
 
         break;
       case Strings.string_tag_next:
@@ -214,23 +219,30 @@ class IntensiveViewModel extends ViewStateObjModel<CommonModel> with BaseChannel
   String getRippleNotice() => _rippleNotice ;
 
   // 点击水波纹
-  void onRipplePressed(){
+  void onRipplePressed() async {
     _rippleNotice = Strings.string_click_wave_audio_parse ;
     _rippleClickable = false ;
-    audioPlayerFactory.playAssetAudio(assetAudio: "record_up.wav",prefix: "audio/");
     notifyListeners();
+    String _recordAudio = await _stopRecordAudio();
+    audioPlayerFactory.playAssetAudio(assetAudio: "record_up.wav",prefix: "audio/");
+    LogUtils.d(tag: "recordPath",msg: _recordAudio);
     var score = ViewUtils.getScore();
-    simulateShowScore(score);
+    simulateShowScore(score,_recordAudio);
   }
 
   // 模拟打分操作
-  void simulateShowScore(int score){
+  void simulateShowScore(int score,String _recordAudio){
     Future.delayed(Duration(milliseconds: 4000),(){
       _rippleClickable = true ;
       _bottomState = _rippleStateFrom ;
       notifyListeners();
-
+      bool _isLocalPath = true ; // 播放缓存音频/播放assets/zip下的原音频
       var _audio = ViewUtils.getScoreResultAudio(score) ;
+      if(_recordAudio.isEmpty){
+        _isLocalPath = false ;
+        _recordAudio = _pageViewData[_curProgress].audio ;
+      }
+
       if(_pageType == PageModuleType.PageAssess){ // 考核
         int _time = _pageViewData[_curProgress].time;
         _time -= 1 ;
@@ -243,32 +255,15 @@ class IntensiveViewModel extends ViewStateObjModel<CommonModel> with BaseChannel
         audioPlayerFactory.playAssetAudio(assetAudio:_audio,prefix: "audio/",listenPlayCompletion:(){ // 音效
            _playVisibly = false ;
            notifyListeners();
-           _playResultAudio("${_pageViewData[_curProgress].audio}", (){ // 模仿录音
-               _playVisibly = true ;
-               notifyListeners();
-               if(score > 60){ // 及格
-                 _bottomState = BottomState.ButtonContinue ;
-                 _scoreVisibly = false ;
-                 notifyListeners();
-               } else { // 不及格
-                 if(_time <= 0){ // 第二次机会答对
-                   _bottomState = BottomState.ButtonContinue ;
-                   _scoreVisibly = false ;
-                   notifyListeners();
-                 } else { // 第一次机会答错
-                   audioPlayerFactory.playAssetAudio(assetAudio: "try_again.wav",prefix: "audio/",listenPlayCompletion: (){
-                     _playVisibly = false ;
-                     _scoreVisibly = false ;
-                     _bottomState = BottomState.RecordButton;
-                     notifyListeners();
-                     _playResultAudio("${_pageViewData[_curProgress].audio}",(){// 播放原音
-                        _playVisibly = true ;
-                        notifyListeners();
-                     });
-                   });
-                 }
-               }
-           });
+           if(_isLocalPath){ // 模仿录音
+              _playResultLocalPathAudio("$_recordAudio", (){
+                _changeAssessState(score,_time);
+              });
+           } else {
+             _playResultAudio("$_recordAudio", (){
+               _changeAssessState(score,_time);
+             });
+           }
         });
       } else { // 非考核
         ViewUtils.showEvaluateToast(score, context: _context);
@@ -277,26 +272,72 @@ class IntensiveViewModel extends ViewStateObjModel<CommonModel> with BaseChannel
           _bottomNavLeftVisibly = false;
           _bottomNavRightVisibly = false;
           notifyListeners();
-          _playResultAudio("${_pageViewData[_curProgress].audio}", (){ // 模仿录音
+          if(_isLocalPath){ // 模仿录音
+            _playResultLocalPathAudio("$_recordAudio", (){
               _playResultAudio("${_pageViewData[_curProgress].audio}", (){ // 播放原音
                 _bottomNavGifVisibly = false ;
                 _bottomNavRightVisibly = true ;
                 _bottomNavLeftVisibly = true ;
                 notifyListeners();
               });
-          });
+            });
+          } else {
+            _playResultAudio("$_recordAudio", (){
+              _playResultAudio("${_pageViewData[_curProgress].audio}", (){ // 播放原音
+                _bottomNavGifVisibly = false ;
+                _bottomNavRightVisibly = true ;
+                _bottomNavLeftVisibly = true ;
+                notifyListeners();
+              });
+            });
+          }
         });
       }
     });
   }
 
-  // 播放打分结果音频
+  /**
+   * 考核
+   */
+  void _changeAssessState(int score,int _time){
+    _playVisibly = true ;
+    notifyListeners();
+    if(score > 60){ // 及格
+      _bottomState = BottomState.ButtonContinue ;
+      _scoreVisibly = false ;
+      notifyListeners();
+    } else { // 不及格
+      if(_time <= 0){ // 第二次机会答对
+        _bottomState = BottomState.ButtonContinue ;
+        _scoreVisibly = false ;
+        notifyListeners();
+      } else { // 第一次机会答错
+        audioPlayerFactory.playAssetAudio(assetAudio: "try_again.wav",prefix: "audio/",listenPlayCompletion: (){
+          _playVisibly = false ;
+          _scoreVisibly = false ;
+          _bottomState = BottomState.RecordButton;
+          notifyListeners();
+          _playResultAudio("${_pageViewData[_curProgress].audio}",(){// 播放原音
+            _playVisibly = true ;
+            notifyListeners();
+          });
+        });
+      }
+    }
+  }
+
+  // 播放打分结果音频 【zip内的音频】
   void _playResultAudio(String _audio,Function callback){
     audioPlayerFactory.playAssetAudio(
         assetAudio: _audio,
         prefix: "zip/",
         listenPlayCompletion: callback
     );
+  }
+
+  // 播放本地路径的音频
+  void _playResultLocalPathAudio(String _audio,Function callback){
+    audioPlayerFactory.playAudio(path: _audio,listenPlayState: callback,isLocal: true);
   }
 
   // PageView 滑动到Page
@@ -314,6 +355,17 @@ class IntensiveViewModel extends ViewStateObjModel<CommonModel> with BaseChannel
 
   //获取底部状态
   BottomState getBottomState() => _bottomState;
+
+  // 开启录音
+  void _startRecordAudio() async {
+     var path = await audioRecorderFactory.startRecord();
+     if(path.isNotEmpty){
+       _pageViewData[_curProgress].recordAudio = path ;
+     }
+  }
+
+  // 结束录音
+  Future<String> _stopRecordAudio() async => await audioRecorderFactory.stopRecord();
 
   // 播放句子音频
   void _playSentenceAudio({String fileName}) async {

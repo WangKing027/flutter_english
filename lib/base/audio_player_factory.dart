@@ -18,7 +18,6 @@ class _AudioPlayerFactory {
   StreamSubscription _errorSubscription ;
 
   static _AudioPlayerFactory _instance ;
-  static _AudioPlayerFactory get instance => _instance ;
   factory _AudioPlayerFactory() => _getInstance();
   static _AudioPlayerFactory _getInstance(){
      if(_instance == null){

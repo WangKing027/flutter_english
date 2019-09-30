@@ -29,8 +29,11 @@ dependencies:
   provider: ^3.0.0+1 # Provider状态管理
   path_drawing: ^0.4.1 # path
   shimmer: ^1.0.0 # 谁用谁闪亮
-  pulltorefresh_flutter: ^0.1.9 #下拉刷新
-  audioplayers: ^0.13.1 #播放音乐
+#  pulltorefresh_flutter: ^0.1.9 #下拉刷新
+  audio_recorder: ^1.0.1 #录音
+  audioplayers: ^0.13.1 #播音
+#  permission_handler: ^3.2.2 #权限管理
+  simple_permissions: ^0.1.8 #权限管理
   path_provider: ^1.1.2 #本地文件读写
 
 dev_dependencies:

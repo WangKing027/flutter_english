@@ -7,6 +7,7 @@ class ModuleModel <T>{
   final String audio ;
   final int evaluationTime ;
   T data ;
+
   ModuleModel({
     this.type,
     this.data,
@@ -18,6 +19,9 @@ class ModuleModel <T>{
   set time(int time) => _time = time ;
   get time => _time != null ? _time : evaluationTime ;
 
+  String _recordAudio ;
+  set recordAudio(String path) => _recordAudio = path ;
+  get recordAudio => _recordAudio == null ? "" : _recordAudio ;
 }
 
 enum PageModuleType {

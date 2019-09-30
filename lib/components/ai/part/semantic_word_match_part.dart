@@ -6,10 +6,10 @@ import 'package:flutter_mvvm/res/index.dart';
 typedef ItemWidgetBuilder = Widget Function(BuildContext context,int index);
 
 // 答对的Item构建
-//typedef ItemCorrectWidgetBuilder = Widget Function(BuildContext context,int index);
+typedef ItemCorrectWidgetBuilder = Widget Function(BuildContext context,int index);
 
 // 答错的Item构建
-//typedef ItemErrorWidgetBuilder = Widget Function(BuildContext context,int index);
+typedef ItemErrorWidgetBuilder = Widget Function(BuildContext context,int index);
 
 class SemanticWordMatchPart extends StatefulWidget{
 
@@ -17,8 +17,8 @@ class SemanticWordMatchPart extends StatefulWidget{
   final int duration ;
   final int interpDuration ;
   final ItemWidgetBuilder builder ;
-//  final ItemCorrectWidgetBuilder correctBuilder ;
-//  final ItemErrorWidgetBuilder errorBuilder ;
+  final ItemCorrectWidgetBuilder correctBuilder ;
+  final ItemErrorWidgetBuilder errorBuilder ;
   final int itemCount ; // item的个数
   final double space ; // 间隔
   final double cacheExtent ; // item的高度
@@ -33,8 +33,8 @@ class SemanticWordMatchPart extends StatefulWidget{
     this.duration = 300 ,
     this.interpDuration = 80,
     @required this.builder ,
-//    this.correctBuilder ,
-//    this.errorBuilder ,
+    this.correctBuilder ,
+    this.errorBuilder ,
     @required this.itemCount,
     @required this.cacheExtent,
     this.space = 8.0,
@@ -101,7 +101,7 @@ class _SemanticWordMatchPartState extends State<SemanticWordMatchPart> with Tick
     });
   }
 
-  /**
+  /*
    * @param init 初次启动整体动画启动
    * @param movePosition 指定执行动画的下标
    */
@@ -151,7 +151,8 @@ class _SemanticWordMatchPartState extends State<SemanticWordMatchPart> with Tick
                  opacity: _viewState == _ViewState.Normal ? 1.0 : 0.0,
                  duration: Duration(milliseconds: widget.duration),
                  child: GestureDetector(
-                   child: widget.builder(context,i),
+                   child: _clickIndex == -1 ? widget.builder(context,i)
+                       : (_clickIndex == _rightIndex ? widget.correctBuilder(context,i) : widget.errorBuilder(context,i)),
                    onTap: (){
                      if(widget.clickable){
                        setState(() {
