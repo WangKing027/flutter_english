@@ -5,7 +5,6 @@ import 'package:flutter_mvvm/provider/view_state_obj_model.dart';
 import 'package:flutter_mvvm/base/audio_player_factory.dart';
 import 'package:flutter_mvvm/model/ai/sentence_model.dart';
 import 'package:flutter_mvvm/model/ai/common_model.dart';
-import 'package:flutter_mvvm/base/route_page_builder.dart';
 import 'package:flutter_mvvm/ui/page/ai/dialogue_preview.dart';
 import 'package:flutter_mvvm/base/base_channel.dart';
 import 'package:flutter_mvvm/utils/log_utils.dart';

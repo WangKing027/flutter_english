@@ -8,7 +8,8 @@ import 'package:flutter_mvvm/components/widget_part_item.dart';
 import 'package:flutter_mvvm/model/unit_model.dart';
 import 'package:flutter_mvvm/ui/page/ai/dialogue_preview.dart';
 import 'package:flutter_mvvm/ui/page/ai/intensive_learning.dart';
-import 'package:flutter_mvvm/ui/page/ai/Semantic_matching.dart';
+import 'package:flutter_mvvm/ui/page/ai/semantic_matching.dart';
+import 'package:flutter_mvvm/ui/page/ai/dictation.dart';
 import 'package:flutter_mvvm/base/route_factory.dart';
 
 class PartPage extends StatefulWidget {
@@ -63,6 +64,11 @@ class _PartPageState extends BaseState<PartPage> with SingleTickerProviderStateM
   List<Map<String,Object>> _getListModel(){
     var _result = [
       {
+        "partName":"单元目录",
+        "partEnName":"Part unit",
+        "routePage":DialoguePreview(),
+      },
+      {
         "partName":"对话初览",
         "partEnName":"Dialogue Preview",
         "routePage":DialoguePreview(),
@@ -90,7 +96,7 @@ class _PartPageState extends BaseState<PartPage> with SingleTickerProviderStateM
       {
         "partName":"听写",
         "partEnName":"Dictation",
-        "routePage":DialoguePreview(),
+        "routePage":Dictation(),
       }
     ] ;
     return _result;
@@ -220,7 +226,7 @@ class _PartPageState extends BaseState<PartPage> with SingleTickerProviderStateM
                         padding: EdgeInsets.only(left: 24.0),
                         child: Align(
                           alignment: Alignment.centerLeft,
-                          child: Text("单元目录",
+                          child: Text(_getListModel()[0]["partName"],
                             style: TextStyle(
                               color: HexColor("#999999"),
                               fontSize: 18.0,
@@ -233,16 +239,16 @@ class _PartPageState extends BaseState<PartPage> with SingleTickerProviderStateM
                  return Padding(
                    padding: EdgeInsets.only(left: 15.0,right: 15.0,bottom: 20.0,),
                    child: PartItemWidget(
-                     partName: _getListModel()[index -1]["partName"],
-                     partEnName: _getListModel()[index -1]["partEnName"],
+                     partName: _getListModel()[index]["partName"],
+                     partEnName: _getListModel()[index]["partEnName"],
                      state: index,
                      onPressed: (){
-                        MyRouteFactory.pushSlideY(context: context,page: _getListModel()[index -1]["routePage"]);
+                        MyRouteFactory.pushSlideY(context: context,page: _getListModel()[index]["routePage"]);
                      },
                    ),
                  );
                },
-               childCount: 6,
+               childCount: _getListModel().length,
              ),
            ),
          ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_mvvm/base/base_state.dart';
+import 'package:flutter_mvvm/model/ai/common_model.dart';
 import 'package:flutter_mvvm/res/colors.dart';
 import 'package:flutter_mvvm/model/ai/module_model.dart';
 import 'package:flutter_mvvm/viewmodel/ai/intensive_viewmodel.dart';
@@ -15,6 +16,11 @@ import 'package:flutter_mvvm/components/ai/part/intensive_word_part.dart';
 import 'package:flutter_mvvm/components/ai/part/intensive_assess_part.dart';
 
 class IntensiveLearning extends StatefulWidget {
+
+  final CommonModel model ;
+
+  IntensiveLearning({Key key,this.model})
+    : super(key:key);
 
   @override
   State<StatefulWidget> createState() => _IntensiveLearningState();
@@ -33,7 +39,7 @@ class _IntensiveLearningState extends BaseState<IntensiveLearning> with SingleTi
   Widget buildPage(BuildContext context) {
     return ProviderWidget<IntensiveViewModel>(
       model: IntensiveViewModel(),
-      initializeData: (model) => model.initModelData(context),
+      initializeData: (model) => model.initModelData(context,widget.model),
       builder: (ctx,model,child){
         if(model.viewState == ViewState.Loading){
           return ViewStateLoadingWidget();

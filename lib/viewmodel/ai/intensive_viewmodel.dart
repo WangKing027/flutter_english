@@ -41,7 +41,7 @@ class IntensiveViewModel extends ViewStateObjModel<CommonModel> with BaseChannel
 
 
   // 自定义初始化方法
-  initModelData(BuildContext context) async {
+  initModelData(BuildContext context, CommonModel model) async {
     // 重写initializeData的方法,进行事件的EventChannel/MethodChannel的注册
     // eventChannel 此时可以直接调用eventChannel发送event
     // methodChannel 直接调用methodChannel调用native方法
@@ -50,7 +50,14 @@ class IntensiveViewModel extends ViewStateObjModel<CommonModel> with BaseChannel
 
     _context = context ;
     setLoading(loading: false);
-    data = await loadData();
+
+    // 区分判断
+    if(null == model){
+      data = await loadData();
+    } else {
+      data = model ;
+    }
+
     _parseCommonModelToPageModel();
     _maxProgress = _pageViewData.length;
     _curProgress = 0 ;
@@ -336,9 +343,7 @@ class IntensiveViewModel extends ViewStateObjModel<CommonModel> with BaseChannel
   }
 
   // 播放本地路径的音频
-  void _playResultLocalPathAudio(String _audio,Function callback){
-    audioPlayerFactory.playAudio(path: _audio,listenPlayState: callback,isLocal: true);
-  }
+  void _playResultLocalPathAudio(String _audio,Function callback) => audioPlayerFactory.playAudio(path: _audio,listenPlayState: callback,isLocal: true);
 
   // PageView 滑动到Page
   void _animJumpToPage(){

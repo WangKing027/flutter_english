@@ -1,0 +1,83 @@
+[
+	{
+		"sentenceEn": "Hello, I’m #David#. Nice to #meet# you!",
+		"originalSentenceEn": "Hello, I’m David. Nice to meet you!",
+		"sentenceEnAuidio": "1 Hello, I’m David. Nice to meet you!.mp3",
+		"answer":[
+			[
+				"David"
+			],
+			[
+				"meet"
+			]
+		],
+		"sentenceEnAuidioFile": {}
+	},
+	{
+		"sentenceEn": "#Nice# to meet you too. My #name# is Amy.",
+		"originalSentenceEn": "Nice to meet you too. My name is Amy.",
+		"sentenceEnAuidio": "2 Nice to meet you too. My name is Amy-.mp3",
+		"answer":[
+			[
+				"Nice"
+			],
+			[
+				"name"
+			]
+		],
+		"sentenceEnAuidioFile": {}
+	},
+	{
+		"sentenceEn": "#What# do you #do#?",
+		"originalSentenceEn": "What do you do?",
+		"sentenceEnAuidio": "3 What do you do-.mp3",
+		"answer":[
+			[
+				"What"
+			],
+			[
+				"do"
+			]
+		],
+		"sentenceEnAuidioFile": {}
+	},
+	{
+		"sentenceEn": "I’m a #teacher#. What #about# you?",
+		"originalSentenceEn": "I’m a teacher. What about you?",
+		"sentenceEnAuidio": "4 I’m a teacher. What about you-.mp3",
+		"answer":[
+			[
+				"teacher"
+			],
+			[
+				"about"
+			]
+		],
+		"sentenceEnAuidioFile": {}
+	},
+	{
+		"sentenceEn": "I’m a #doctor# in a #hospital#.",
+		"originalSentenceEn": "I’m a doctor in a hospital.",
+		"sentenceEnAuidio": "5 I’m a doctor in a hospital-.mp3",
+		"answer":[
+			[
+				"doctor"
+			],
+			[
+				"hospital"
+			]
+		],
+		"sentenceEnAuidioFile": {}
+	},
+	{
+		"sentenceEn": "That #sound#s fun!",
+		"originalSentenceEn": "That sounds fun!",
+		"sentenceEnAuidio": "6 That sounds fun!.mp3",
+		"answer":[
+			[
+				"sound"
+			]
+		],
+		"sentenceEnAuidioFile": {}
+	}
+]
